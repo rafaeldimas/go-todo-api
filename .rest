@@ -1,0 +1,10 @@
+GET http://localhost:8080/todos
+
+###
+POST http://localhost:8080/todos
+
+###
+PUT http://localhost:8080/todos
+
+###
+DELETE http://localhost:8080/todos
