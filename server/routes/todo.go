@@ -4,15 +4,17 @@ import (
 	"net/http"
 
 	"github.com/rafaeldimas/go-todo-api/domain/todo"
-	"github.com/rafaeldimas/go-todo-api/server/handlers"
 
 	infra "github.com/rafaeldimas/go-todo-api/infra/repositories/todo"
 )
 
-func RegisterTodoRoute() {
+func RegisterTodoRoute(router *http.ServeMux) {
 	repository := infra.NewInMemoryRepository()
 	service := todo.NewService(repository)
 	controller := todo.NewController(service)
 
-	http.HandleFunc("/todos", handlers.NewTodoHandler(controller).Handler)
+	router.HandleFunc("POST /todos", controller.Create)
+	router.HandleFunc("GET /todos", controller.List)
+	router.HandleFunc("PUT /todos/{id}", controller.Update)
+	router.HandleFunc("DELETE /todos/{id}", controller.Delete)
 }

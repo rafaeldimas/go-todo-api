@@ -2,6 +2,7 @@ package todo
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -26,12 +27,16 @@ func NewController(service TodoService) TodoController {
 func (controller *todoController) Create(w http.ResponseWriter, r *http.Request) {
 	todo := Todo{}
 	if err := json.NewDecoder(r.Body).Decode(&todo); err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	newTodo, err := controller.service.Create(&todo)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
@@ -42,7 +47,9 @@ func (controller *todoController) Create(w http.ResponseWriter, r *http.Request)
 func (controller *todoController) List(w http.ResponseWriter, r *http.Request) {
 	todos, err := controller.service.List()
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
@@ -53,12 +60,24 @@ func (controller *todoController) List(w http.ResponseWriter, r *http.Request) {
 func (controller *todoController) Update(w http.ResponseWriter, r *http.Request) {
 	todo := Todo{}
 	if err := json.NewDecoder(r.Body).Decode(&todo); err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	updatedTodo, err := controller.service.Update(todo.Id, &todo)
+	pathId := r.PathValue("id")
+	id, err := strconv.Atoi(pathId)
+
 	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	updatedTodo, err := controller.service.Update(id, &todo)
+	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
@@ -67,15 +86,19 @@ func (controller *todoController) Update(w http.ResponseWriter, r *http.Request)
 }
 
 func (controller *todoController) Delete(w http.ResponseWriter, r *http.Request) {
-	queryId := r.URL.Query().Get("id")
-	id, err := strconv.Atoi(queryId)
+	pathId := r.PathValue("id")
+	id, err := strconv.Atoi(pathId)
 
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	if err := controller.service.Delete(id); err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)

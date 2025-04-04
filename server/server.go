@@ -9,10 +9,13 @@ import (
 )
 
 func Init(port int64) {
-	routes.RegisterTodoRoute()
+	router := http.NewServeMux()
+
+	routes.RegisterTodoRoute(router)
 
 	log.Printf("Servidor inicializado na port %d", port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
+
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), router); err != nil {
 		log.Fatalf("Error ao inicializar o servidor: %v", err)
 	}
 }

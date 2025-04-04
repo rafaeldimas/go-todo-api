@@ -30,6 +30,7 @@ func (repository *inMemoryTodoRepository) List() ([]*domain.Todo, error) {
 func (repository *inMemoryTodoRepository) Update(id int, todo *domain.Todo) (*domain.Todo, error) {
 	for i, t := range repository.todos {
 		if t.Id == id {
+			todo.Id = id
 			repository.todos[i] = todo
 
 			return todo, nil
