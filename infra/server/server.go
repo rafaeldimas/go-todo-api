@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rafaeldimas/go-todo-api/server/routes"
+	"github.com/rafaeldimas/go-todo-api/infra/server/routes"
 )
 
 func Init(port int64) {

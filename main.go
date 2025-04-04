@@ -4,7 +4,7 @@ import (
 	"log"
 
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/rafaeldimas/go-todo-api/server"
+	"github.com/rafaeldimas/go-todo-api/infra/server"
 )
 
 func main() {
