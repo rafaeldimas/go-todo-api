@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todos
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: todo
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+
+volumes:
+  mysql-data:

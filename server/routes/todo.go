@@ -9,7 +9,7 @@ import (
 )
 
 func RegisterTodoRoute(router *http.ServeMux) {
-	repository := infra.NewInMemoryRepository()
+	repository := infra.NewMysqlRepository()
 	service := todo.NewService(repository)
 	controller := todo.NewController(service)
 

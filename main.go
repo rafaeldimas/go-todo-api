@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/rafaeldimas/go-todo-api/server"
 )
 
