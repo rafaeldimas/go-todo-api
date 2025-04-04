@@ -9,5 +9,4 @@ import (
 func main() {
 	log.Println("Aplicação iniciada")
 	server.Init(8080)
-	log.Println("Aplicação finalizada")
 }

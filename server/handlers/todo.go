@@ -3,20 +3,30 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/rafaeldimas/go-todo-api/todo"
+	"github.com/rafaeldimas/go-todo-api/domain/todo"
 )
 
-func TodoHandler(w http.ResponseWriter, r *http.Request) {
-	controller := todo.NewController()
+type todoHandler struct {
+	controller todo.TodoController
+}
 
+func NewTodoHandler(controller todo.TodoController) todoHandler {
+	return todoHandler{
+		controller: controller,
+	}
+}
+
+func (handlers todoHandler) Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
-		controller.Create(w, r)
+		handlers.controller.Create(w, r)
 	case http.MethodGet:
-		controller.List(w, r)
+		handlers.controller.List(w, r)
 	case http.MethodPut:
-		controller.Update(w, r)
+		handlers.controller.Update(w, r)
 	case http.MethodDelete:
-		controller.Delete(w, r)
+		handlers.controller.Delete(w, r)
+	default:
+		http.NotFound(w, r)
 	}
 }
